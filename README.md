@@ -244,3 +244,52 @@ Conversion inefficiency is concentrated at the **View → Cart stage** and varie
 Optimization should be segment-specific rather than site-wide.
 
 This project demonstrates structured hypothesis testing, disciplined modeling decisions, and measurable business impact translation — aligning technical execution with strategic business thinking.
+
+
+
+
+
+## Project Story (How I Approached This Problem)
+
+The goal of this project was to understand how customers move through an e-commerce purchase journey and identify where the biggest loss of potential buyers occurs.
+
+I built a **session-level sequential funnel** to model the real customer journey:
+
+View → Add to Cart → Purchase
+
+A key decision was using **session-level analysis instead of event-level**.  
+A single session can contain many product views, which would inflate activity and distort conversion if analysed at event level. Session-level modelling reflects real customer behaviour more accurately.
+
+To preserve the true journey, I enforced **sequential funnel logic**, ensuring that:
+- A cart must follow a view
+- A purchase must follow a cart
+
+This prevented tracking inconsistencies from inflating downstream conversion rates.
+
+### Key Finding — The Bottleneck
+
+The analysis revealed a major drop between **View → Cart (4.01%)**, while **Cart → Purchase remained strong (56.39%)**.
+
+This indicates that checkout performs well, but **very few customers add products to their cart**.
+
+### Understanding the Root Causes
+
+To understand *why* this happens, I segmented the funnel by:
+
+**1. Product Category**
+Conversion varied dramatically across categories, with some exceeding 8% while others showed almost zero conversion. This suggests the issue is **category-specific**, not a site-wide problem.
+
+**2. Session Price Exposure**
+I calculated the **average price viewed per session** and divided sessions into quartiles to maintain balanced comparison groups.
+
+The lowest price sessions converted the worst, suggesting these users have **lower purchase intent and higher price comparison behaviour**.
+
+### Business Impact
+
+Finally, I modelled a realistic improvement scenario.
+
+Increasing View → Cart conversion from **4.01% to 5%** could generate an estimated:
+
+**≈ £395,000 additional revenue**
+
+This connects behavioural analytics directly to business value and highlights where optimisation efforts should focus.
