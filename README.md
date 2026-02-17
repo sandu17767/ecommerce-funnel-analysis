@@ -48,22 +48,39 @@ Each hypothesis was tested through structured segmentation and consistent sessio
 
 ## 🛠 Methodology
 
-### 1️⃣ Session-Level Funnel Construction
+## Data Cleaning & Preparation
 
-Raw event data contained multiple actions per session.  
-To ensure behavioral clarity and avoid inflated metrics, event-level data was transformed into session-level flags using SQL aggregation:
+Several data quality and tracking issues were identified and handled during the transformation stage to ensure the funnel reflects real customer behaviour.
 
-- viewed (0/1)  
-- carted (0/1)  
-- purchased (0/1)  
+**1. Event → Session Transformation**  
+The raw dataset contained multiple events per session (views, carts, purchases).  
+To avoid inflated activity and misleading conversion rates, events were aggregated into **session-level behavioural flags** (viewed, carted, purchased). This ensures each session is counted once per funnel stage.
 
-A **sequential funnel model** was enforced:
+**2. Sequential Funnel Enforcement**  
+Some sessions showed purchases without cart events due to tracking gaps.  
+To maintain a logical journey, the funnel was rebuilt using sequential rules:
+- Cart counted only if a view occurred  
+- Purchase counted only if both view and cart occurred  
 
-View → Cart → Purchase
+**3. Missing Category Handling**  
+Some events lacked category codes. These sessions were excluded **only from category-level analysis** to prevent distorted comparisons, while remaining included in overall funnel metrics.
 
-Sessions that recorded purchases without corresponding cart events were retained for transparency but excluded from sequential stage progression to maintain logical integrity.
+**4. Invalid Price Values**  
+View events with `price = 0` were identified as likely tracking errors or missing data.  
+These were excluded from price segmentation to ensure accurate percentile and bucket calculations.
 
----
+These preparation steps ensured reliable conversion metrics and trustworthy behavioural insights.
+
+### Summary
+
+Key data preparation steps ensured the analysis reflects realistic customer behaviour:
+
+• Event data transformed into session-level journeys  
+• Tracking inconsistencies corrected using sequential funnel logic  
+• Missing category values handled for fair segmentation  
+• Invalid price values excluded from price analysis  
+
+These steps ensured reliable conversion metrics and trustworthy business insights.
 
 ## 📊 Core Funnel Results
 
