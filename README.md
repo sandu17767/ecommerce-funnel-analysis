@@ -50,35 +50,31 @@ Each hypothesis was tested through structured segmentation and consistent sessio
 
 ## Data Cleaning & Preparation
 
-Several data quality and tracking issues were identified and handled during the transformation stage to ensure the funnel reflects real customer behaviour.
+To ensure reliable funnel metrics, several data quality and tracking issues were handled during transformation.
+### Event → Session Transformation
+- Raw data contained multiple events per session.
+- Aggregated events into **session-level flags** (viewed, carted, purchased).
+- Prevents inflated activity and ensures the funnel reflects real user journeys.
 
-**1. Event → Session Transformation**  
-The raw dataset contained multiple events per session (views, carts, purchases).  
-To avoid inflated activity and misleading conversion rates, events were aggregated into **session-level behavioural flags** (viewed, carted, purchased). This ensures each session is counted once per funnel stage.
+### Sequential Funnel Enforcement
+Tracking gaps showed purchases without cart events.  
+To maintain a logical journey:
 
-**2. Sequential Funnel Enforcement**  
-Some sessions showed purchases without cart events due to tracking gaps.  
-To maintain a logical journey, the funnel was rebuilt using sequential rules:
-- Cart counted only if a view occurred  
-- Purchase counted only if both view and cart occurred  
+- Cart counted **only if a view occurred**
+- Purchase counted **only if view + cart occurred**
 
-**3. Missing Category Handling**  
-Some events lacked category codes. These sessions were excluded **only from category-level analysis** to prevent distorted comparisons, while remaining included in overall funnel metrics.
+This preserves the true sequence: **View → Cart → Purchase**
 
-**4. Invalid Price Values**  
-View events with `price = 0` were identified as likely tracking errors or missing data.  
-These were excluded from price segmentation to ensure accurate percentile and bucket calculations.
+### Missing Category Handling
+- Some events had **NULL category codes**.
+- Excluded only from **category analysis** to avoid distorted comparisons.
+- Retained for overall funnel calculations.
 
-These preparation steps ensured reliable conversion metrics and trustworthy behavioural insights.
+### Invalid Price Values
+- Detected view events with **price = 0** (likely missing/incorrect data).
+- Excluded from price segmentation to ensure accurate percentile buckets.
 
-### Summary
-
-Key data preparation steps ensured the analysis reflects realistic customer behaviour:
-
-• Event data transformed into session-level journeys  
-• Tracking inconsistencies corrected using sequential funnel logic  
-• Missing category values handled for fair segmentation  
-• Invalid price values excluded from price analysis  
+**Result:** Clean, session-level data ready for behavioural and conversion analysis.
 
 These steps ensured reliable conversion metrics and trustworthy business insights.
 
